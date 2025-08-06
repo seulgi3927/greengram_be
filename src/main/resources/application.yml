@@ -1,0 +1,54 @@
+constants:
+  file:
+    upload-directory: D:\student\greengram
+  jwt:
+    issuer: green502@green.com #?? ???
+    bearer-format: JWT
+
+    claim-key: signedUser
+    secret-key: DaeguGreenArtAcademyClass502MsaClassFightingkkkkkk
+
+    access-token-cookie-name: access-token
+    access-token-cookie-path: / #?? ???? access-token?? ????.
+    access-token-cookie-validity-seconds: 900 # 15? (s) 60 * 15
+    access-token-validity-milliseconds: 900_000 # 15? (ms) 60 * 15 * 1000
+
+    refresh-token-cookie-name: refresh-token
+    refresh-token-cookie-path: /api/v1/account/reissue #?? path?? refresh-token?? ????.
+    refresh-token-cookie-validity-seconds: 1_296_000 # 15? (s) 60 * 60 * 24 * 15
+    refresh-token-validity-milliseconds: 1_296_000_000 # 15? (ms) 60 * 60 * 24 * 15 * 1000
+
+spring:
+  application:
+    name: greengram
+  datasource:
+    url: jdbc:log4jdbc:mariadb://localhost/greengram
+    username: root
+    password: green502
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  jackson:
+    default-property-inclusion: non_null # 응답 JSON에서 null인 속성은 제외
+  jpa:
+    database: mysql
+    defer-datasource-initialization: true #JPA ??? ?? ?? data.sql
+    hibernate:
+      #  ddl-auto: update #???? ??? entity? ???? create??.
+      ddl-auto: create #???? ????? ???? ?? drop ? create??.
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 20
+        format_sql: true #??? ??? ??? ? ????? ???
+        order_updates: true
+        show_sql: true
+  servlet:
+    multipart:
+      max-file-size: 15MB
+  sql:
+    init:
+      mode: always
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mappers/**/*.xml
