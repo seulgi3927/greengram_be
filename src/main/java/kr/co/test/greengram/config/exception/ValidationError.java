@@ -20,5 +20,10 @@ public class ValidationError {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return String.format("field: %s, message: %s", field, message);
+    }
+
 }
 
