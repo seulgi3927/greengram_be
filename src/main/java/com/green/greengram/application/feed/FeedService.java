@@ -20,8 +20,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedService {
     private final FeedMapper feedMapper;
+    private final FeedCommentMapper feedCommentMapper;
     private final FeedRepository feedRepository;
     private final ImgUploadManager imgUploadManager;
+    private final ConstComment constComment;
 
     @Transactional
     public FeedPostRes postFeed(long signedUserId, FeedPostReq req, List<MultipartFile> pics) {
@@ -48,6 +50,15 @@ public class FeedService {
         //각 피드에서 사진 가져오기
         for(FeedGetRes feedGetRes : list) {
             feedGetRes.setPics(feedMapper.findAllPicByFeedId(feedGetRes.getFeedId()));
+            //startIdx:0, size: 4
+            FeedCommentGetReq req = new FeedCommentGetReq(feedGetRes.getFeedId(), constComment.startIndex, constComment.needForViewCount);
+            List<FeedCommentItem> commentList = feedCommentMapper.findAllByFeedIdLimitedTo(req);
+            boolean moreComment = commentList.size() > constComment.needForViewCount; //row수가 4였을 때만 true가 담기고, row수가 0~3인 경우는 false가 담긴다.
+            FeedCommentGetRes feedCommentGetRes = new FeedCommentGetRes(moreComment, commentList);
+            feedGetRes.setComments(feedCommentGetRes);
+            if(moreComment) { //마지막 댓글 삭제
+                commentList.remove(commentList.size() - 1); //마지막 아이템 삭제
+            }
         }
         return list;
     }

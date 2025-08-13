@@ -20,6 +20,7 @@ import java.util.List;
 public class FeedController {
     private final FeedService feedService;
 
+    private final int
     @PostMapping
     public ResultResponse<?> postFeed(@AuthenticationPrincipal UserPrincipal userPrincipal
                                     , @Valid @RequestPart FeedPostReq req
